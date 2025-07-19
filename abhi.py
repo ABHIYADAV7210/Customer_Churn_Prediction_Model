@@ -7,15 +7,13 @@ Original file is located at
     https://colab.research.google.com/drive/1dupMgICf1-WfKP16XH4tSUQSud8Kpp9T
 """
 
-from google.colab import drive
-drive.mount('/content/drive')
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-dataset = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Datasets/Churn_Modelling.csv')
+dataset = pd.read_csv('Churn_Modelling.csv')
 
 dataset.head()
 
@@ -96,11 +94,20 @@ f1=f1_score(y_test,y_pred)
 prec=precision_score(y_test,y_pred)
 rec=recall_score(y_test,y_pred)
 RF_results=pd.DataFrame([['Random Forest Classifier',acc,f1,prec,rec]],columns=['Model','Accuracy','F1','Precision','Recall'])
-results.append(RF_results,ignore_index=True)
+results = pd.concat([results, RF_results], ignore_index=True)
 
 print(confusion_matrix(y_test,y_pred))
 
-dataset.head()
+# Get the column names from the training data
+X_train_cols = X.columns
+print(X_train_cols)
 
-single_obs=[[647,40,3,85000.45,2,0,0,92012.45,0,1,1]]
-clf.predict(scaler.fit_transform(single_obs))
+# Create a new DataFrame for the single observation with the same columns
+single_obs_df = pd.DataFrame([[619, 42, 2, 0.00, 1, 1, 1, 101348.88, 0, 0, 0]], columns=['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary', 'Geography_Germany', 'Geography_Spain', 'Gender_Male'])
+
+# Transform the single observation
+single_obs_scaled = scaler.transform(single_obs_df)
+
+# Make the prediction
+prediction = clf.predict(single_obs_scaled)
+print(prediction)
